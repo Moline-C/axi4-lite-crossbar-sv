@@ -1,3 +1,7 @@
 sim/work/
+sim/and_gate_sim.cr.mti
+sim/and_gate_sim.mpf
+sim/transcript
+sim/vsim.wlf
 *.vcd
 *.wlf
