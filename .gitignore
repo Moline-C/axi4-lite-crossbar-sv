@@ -1,7 +1,16 @@
+# ModelSim generated files
 sim/work/
-sim/and_gate_sim.cr.mti
-sim/and_gate_sim.mpf
+sim/*.mpf
+sim/*.mti
 sim/transcript
 sim/vsim.wlf
+*.mpf
+*.mti
 *.vcd
 *.wlf
+work/
+transcript
+sim.log
+
+# ModelSim project files in root
+*.cr.mti
