@@ -39,4 +39,31 @@ module round_robin_arbiter # (
         end 
     end 
 
+// SVA Assertions
+
+// grant is always one-hot or zero - never two initiators granted at once
+property p_grant_onehot;
+    @(posedge clk) disable iff (rst)
+    $onehot0(grant);
+endproperty
+assert property (p_grant_onehot)
+    else $error("ASSERT FAIL: multiple initiators granted simultaneously");
+
+// grant must be zero during reset
+property p_grant_zero_on_reset;
+    @(posedge clk)
+    rst |-> (grant == 0);
+endproperty
+assert property (p_grant_zero_on_reset)
+    else $error("ASSERT FAIL: grant non-zero during reset");
+
+// grant only goes high when there is a request
+property p_grant_needs_request;
+    @(posedge clk) disable iff (rst)
+    (grant != 0) |-> (request != 0);
+endproperty
+assert property (p_grant_needs_request)
+    else $error("ASSERT FAIL: grant high with no request");
+    
 endmodule
+

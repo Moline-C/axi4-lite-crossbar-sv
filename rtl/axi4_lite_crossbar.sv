@@ -136,4 +136,30 @@ module axi4_lite_crossbar # (
         end
     end
 
+// SVA Assertions
+
+// only one target selected at a time - target_sel must be valid when grant is active
+property p_valid_target_sel;
+    @(posedge clk) disable iff (rst)
+    (grant != 0) |-> (target_sel < NUM_TARGETS);
+endproperty
+assert property (p_valid_target_sel)
+    else $error("ASSERT FAIL: invalid target selected");
+
+// grant must be zero when no requests pending
+property p_no_grant_without_requests;
+    @(posedge clk) disable iff (rst)
+    (grant != 0) |-> ((awvalid | arvalid) != 0);
+endproperty
+assert property (p_no_grant_without_requests)
+    else $error("ASSERT FAIL: grant active with no pending request");
+
+// grant is always one-hot or zero at crossbar level
+property p_crossbar_grant_onehot;
+    @(posedge clk) disable iff (rst)
+    $onehot0(grant);
+endproperty
+assert property (p_crossbar_grant_onehot)
+    else $error("ASSERT FAIL: multiple grants active in crossbar");
+
 endmodule

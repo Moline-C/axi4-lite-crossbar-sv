@@ -150,4 +150,46 @@ module axi4_lite_target #(
         end
     end
 
+// SVA Assertions
+
+// bvalid only goes high after a write - never during reset
+property p_bvalid_after_reset;
+    @(posedge clk)
+    rst |-> (bvalid == 0);
+endproperty
+assert property (p_bvalid_after_reset)
+    else $error("ASSERT FAIL: bvalid high during reset");
+
+// rvalid only goes high after a read - never during a reset
+property p_valid_after_reset;
+    @(posedge clk)
+    rst |-> (rvalid == 0);
+endproperty
+assert property (p_valid_after_reset)
+    else $error("ASSERT FAIL: rvalid high during reset");
+
+// awready and wready always high when in W_ADDR state
+property p_awready_in_waddr;
+    @(posedge clk) disable iff (rst)
+    (wstate == W_ADDR) |-> (awready == 1);
+endproperty
+assert property (p_awready_in_waddr)
+    else $error("ASSERT FAIL: awready low in W_ADDR state");
+
+// bvalid only high in W_RESP state
+property p_bvalid_in_wresp;
+    @(posedge clk) disable iff (rst)
+    (bvalid == 1) |-> (wstate == W_RESP);
+endproperty
+assert property (p_bvalid_in_wresp)
+    else $error("ASSERT FAIL: bvalid high outside W_RESP state");
+
+// rvalid only high in R_DATA state
+property p_rvalid_in_rdata;
+    @(posedge clk) disable iff (rst)
+    (rvalid == 1) |-> (rstate == R_DATA);
+endproperty
+assert property (p_rvalid_in_rdata)
+    else $error("ASSERT FAIL: rvalid high outside R_DATA state");
+
 endmodule
