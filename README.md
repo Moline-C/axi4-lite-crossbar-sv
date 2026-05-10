@@ -25,7 +25,7 @@ AXI4-Lite is the ARM-standard protocol used to connect IP blocks inside modern S
 - [x] Phase 1 — AXI4-Lite target interface with handshaking
 - [x] Phase 2 — Round-robin arbitration logic
 - [x] Phase 3 — Full crossbar fabric integration and routing
-- [ ] Phase 4 — Formal verification with SVA properties
+- [x] Phase 4 — Formal verification with SVA properties
 - [ ] Phase 5 — UVM testbench and functional coverage
 
 ## Tools & Technologies
