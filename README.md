@@ -1,6 +1,6 @@
-# axi4-lite-crossbar-sv
+# AXI4-Lite Crossbar Interconnect with Formal Verification
 
-> **Status: In Progress** — actively being developed
+> **Status: Complete**
 
 A parameterizable, multi-initiator multi-target AXI4-Lite bus fabric implemented in SystemVerilog with formal property verification and a UVM testbench.
 
@@ -16,7 +16,7 @@ AXI4-Lite is the ARM-standard protocol used to connect IP blocks inside modern S
 - Configurable 32/64-bit data width and address map
 - Round-robin arbitration with zero-deadlock guarantee
 - Full AXI4-Lite 5-channel handshake compliance (AW, W, B, AR, R)
-- SystemVerilog Assertions (SVA) for formal property verification
+- 11 SystemVerilog Assertions (SVA) across arbiter, target, and crossbar
 - UVM testbench with driver, monitor, scoreboard, and coverage collector
 
 ## Project Phases
@@ -26,7 +26,7 @@ AXI4-Lite is the ARM-standard protocol used to connect IP blocks inside modern S
 - [x] Phase 2 — Round-robin arbitration logic
 - [x] Phase 3 — Full crossbar fabric integration and routing
 - [x] Phase 4 — Formal verification with SVA properties
-- [ ] Phase 5 — UVM testbench and functional coverage
+- [x] Phase 5 — UVM testbench and functional coverage
 
 ## Tools & Technologies
 
