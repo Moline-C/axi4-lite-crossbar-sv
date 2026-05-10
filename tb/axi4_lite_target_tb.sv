@@ -7,27 +7,27 @@ module axi4_lite_target_tb;
     logic clk;
     logic rst;
 
-    logic                    awvalid;
-    logic                    awready;
-    logic [ADDR_WIDTH-1:0]   awaddr;
+    logic awvalid;
+    logic awready;
+    logic [ADDR_WIDTH-1:0] awaddr;
 
-    logic                    wvalid;
-    logic                    wready;
-    logic [DATA_WIDTH-1:0]   wdata;
+    logic wvalid;
+    logic wready;
+    logic [DATA_WIDTH-1:0] wdata;
     logic [DATA_WIDTH/8-1:0] wstrb;
 
-    logic                    bvalid;
-    logic                    bready;
-    logic [1:0]              bresp;
+    logic bvalid;
+    logic bready;
+    logic [1:0] bresp;
 
-    logic                    arvalid;
-    logic                    arready;
-    logic [ADDR_WIDTH-1:0]   araddr;
+    logic arvalid;
+    logic arready;
+    logic [ADDR_WIDTH-1:0] araddr;
 
-    logic                    rvalid;
-    logic                    rready;
-    logic [DATA_WIDTH-1:0]   rdata;
-    logic [1:0]              rresp;
+    logic rvalid;
+    logic rready;
+    logic [DATA_WIDTH-1:0] rdata;
+    logic [1:0] rresp;
 
     axi4_lite_target #(
         .DATA_WIDTH(DATA_WIDTH),

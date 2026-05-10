@@ -46,46 +46,50 @@ module axi4_lite_crossbar # (
     // arbiter signals
     logic [NUM_INITIATORS-1:0] grant;
     logic transaction_done;
-    
+
+    // address decode - which target does the granted initiator want
+    logic [$clog2(NUM_TARGETS)-1:0] target_sel;
+
+    // granted initiator index
+    logic [$clog2(NUM_INITIATORS)-1:0] granted_initiator;
+
     round_robin_arbiter # (
         .NUM_INITIATORS(NUM_INITIATORS)
     ) arbiter (
         .clk(clk),
         .rst(rst),
-        .request(awvalid),
+        .request(awvalid | arvalid),
         .transaction_done(transaction_done),
         .grant(grant)
     );
-
-    // address decode - which target does the granted initiator want
-    logic [$clog2(NUM_TARGETS) - 1:0] target_sel;
-
-    // granted initiator index
-    logic [$clog2(NUM_INITIATORS)-1:0] granted_initiator;
 
     // find which initiator was granted
     always_comb begin
         granted_initiator = 0;
         for (int i = 0; i < NUM_INITIATORS; i++) begin
             if (grant[i]) granted_initiator = i;
-        end 
-    end 
+        end
+    end
 
-    // address decoder - which target does the granted initator want 
+    // address decoder - which target does the granted initiator want
     always_comb begin
         target_sel = 0;
         if (grant != 0) begin
-            target_sel = awaddr[granted_initiator][ADDR_WIDTH-1 -: $clog2(NUM_TARGETS)];
-        end 
-    end 
+            if (awvalid[granted_initiator])
+                target_sel = awaddr[granted_initiator][ADDR_WIDTH-1 -: $clog2(NUM_TARGETS)];
+            else
+                target_sel = araddr[granted_initiator][ADDR_WIDTH-1 -: $clog2(NUM_TARGETS)];
+        end
+    end
 
-    // transaction done when write response handshake completes
+    // transaction done when write or read response handshake completes
     always_comb begin
         transaction_done = 0;
         for (int i = 0; i < NUM_TARGETS; i++) begin
             if (t_bvalid[i] && t_bready[i]) transaction_done = 1;
-        end 
-    end 
+            if (t_rvalid[i] && t_rready[i]) transaction_done = 1;
+        end
+    end
 
     // signal routing - connect granted initiator to correct target
     always_comb begin
@@ -129,6 +133,7 @@ module axi4_lite_crossbar # (
             rvalid[granted_initiator] = t_rvalid[target_sel];
             rdata[granted_initiator] = t_rdata[target_sel];
             rresp[granted_initiator] = t_rresp[target_sel];
-        end 
-    end 
+        end
+    end
+
 endmodule
